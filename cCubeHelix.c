@@ -62,6 +62,34 @@ typedef struct{
   double b;
 }ch_fsample_s;
 
+
+ch_fsample_s ch_colorFunction(double x, double start, double rot, double hue, double gamma){
+
+  ch_fsample_s sample;
+
+  double angle;
+  double amplitude;
+
+  double tr;
+  double tg;
+  double tb;
+
+  x = x > 1.0 ? 1.0 : (x < 0 ? 0.0 : x);
+  angle = 2.0*M_PI*( (start/3.0) + 1 + rot*x);
+  x = pow(x,gamma);
+  amplitude = hue * x * (1 - x)/2.0;
+  tr = x + amplitude*(-0.14861*cos(angle) + 1.78277*sin(angle));
+  tg = x + amplitude*(-0.29227*cos(angle) - 0.90649*sin(angle));
+  tb = x + amplitude*(1.97294*cos(angle));
+
+  sample.r = tr > 1.0 ? 1.0 : (tr < 0 ? 0 : tr);
+  sample.g = tg > 1.0 ? 1.0 : (tg < 0 ? 0 : tg);
+  sample.b = tb > 1.0 ? 1.0 : (tb < 0 ? 0 : tb);
+
+  return sample;
+
+}
+
 ch_fsample_s* ch_fMap(size_t length, ch_param_s params){
   double x;
   double angle;
@@ -75,19 +103,22 @@ ch_fsample_s* ch_fMap(size_t length, ch_param_s params){
 
   for(int i = 0; i < length;i++){
     x = ((double)i)/(length-1);
-    angle = 2.0*M_PI*( (params.start/3.0) + 1 + params.rot*x);
-    x = pow(x,params.gamma);
-    amplitude = params.hue * x * (1 - x)/2.0;
-    tr = x + amplitude*(-0.14861*cos(angle) + 1.78277*sin(angle));
-    tg = x + amplitude*(-0.29227*cos(angle) - 0.90649*sin(angle));
-    tb = x + amplitude*(1.97294*cos(angle));
-
-    samples[i].r = tr > 1.0 ? 1.0 : (tr < 0 ? 0 : tr);
-    samples[i].g = tg > 1.0 ? 1.0 : (tg < 0 ? 0 : tg);
-    samples[i].b = tb > 1.0 ? 1.0 : (tb < 0 ? 0 : tb);
+    samples[i] = ch_colorFunction(x,params.start, params.rot, params.hue, params.gamma);
   }
 
   return samples;
+}
+
+unsigned char* ch_cMap(size_t length, ch_param_s params){
+  ch_fsample_s* samples = ch_fMap(length, params);
+  unsigned char* map = (unsigned char*)malloc(sizeof(char) * 3*length);
+  for(int i = 0; i < length; i++){
+    map[i*3] = (unsigned char)(samples[i].r*255);
+    map[i*3 + 1] = (unsigned char)(samples[i].g*255);
+    map[i*3 + 2] = (unsigned char)(samples[i].b*255);
+  }
+  free(samples);
+  return map;
 
 }
 
@@ -105,6 +136,13 @@ int main(){
   for( int i = 0; i < 100; i++){
     double v = (samples[i].r + samples[i].r + samples[i].r)/3;
     printf("val: %f\n",v);
+  }
+
+  unsigned char* char_samples = ch_cMap(100,params);
+  
+  for( int i = 0; i < 100; i++){
+    unsigned char v = (char_samples[i*3] + char_samples[i*3+1] + char_samples[i*3+2])/3;
+    printf("val: %d\n",v);
   }
 
   return 0;

@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+
 /**
  * A basic C implementation of the cubehelix color scheme by David Green.
  *
@@ -122,7 +127,7 @@ unsigned char* ch_cMap(size_t length, ch_param_s params){
 
 }
 
-
+/**
 int main(){
 
   ch_param_s params;
@@ -147,5 +152,5 @@ int main(){
 
   return 0;
 }
-
+**/
 

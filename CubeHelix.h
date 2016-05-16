@@ -55,6 +55,14 @@ typedef struct{
   double b;
 }ch_fsample_s;
 
+typedef struct{
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+}ch_csample_s;
+
 ch_fsample_s ch_colorFunction(double x, double start, double rot, double hue, double gamma);
 
 ch_fsample_s* ch_fMap(size_t length, ch_param_s params);
+
+ch_csample_s* ch_cMap(size_t length, ch_param_s params){

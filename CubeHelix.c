@@ -60,6 +60,12 @@ typedef struct{
 }ch_fsample_s;
 
 
+typedef struct{
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+}ch_csample_s;
+
 ch_fsample_s ch_colorFunction(double x, double start, double rot, double hue, double gamma){
 
   ch_fsample_s sample;
@@ -106,13 +112,13 @@ ch_fsample_s* ch_fMap(size_t length, ch_param_s params){
   return samples;
 }
 
-unsigned char* ch_cMap(size_t length, ch_param_s params){
+ch_csample_s* ch_cMap(size_t length, ch_param_s params){
   ch_fsample_s* samples = ch_fMap(length, params);
-  unsigned char* map = (unsigned char*)malloc(sizeof(char) * 3*length);
+  ch_csample_s* map = (ch_csample_s*)malloc(sizeof(ch_csample_s)*length);
   for(int i = 0; i < length; i++){
-    map[i*3] = (unsigned char)(samples[i].r*255);
-    map[i*3 + 1] = (unsigned char)(samples[i].g*255);
-    map[i*3 + 2] = (unsigned char)(samples[i].b*255);
+    map[i].r = (unsigned char)(samples[i].r*255);
+    map[i].g = (unsigned char)(samples[i].g*255);
+    map[i].b = (unsigned char)(samples[i].b*255);
   }
   free(samples);
   return map;

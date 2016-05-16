@@ -1,15 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
-
 /**
  * A basic C implementation of the cubehelix color scheme by David Green.
  *
  * Documentation can be found in cCubeHelix.h
  *
  * Author: Henrik Sommerland
- * Main: henrik.sommerland@gmail.com
+ * Mail: henrik.sommerland@gmail.com
  *
  * This code is based upon the FORTRAN 77 implementation
  * provided in the paper:
@@ -18,9 +13,6 @@
  * By: D. A. Green
  *
  * http://arxiv.org/abs/1108.5083
- *
- *
- * 
  *
  * This is free and unencumbered software released into the public domain.
  * 
@@ -126,31 +118,3 @@ unsigned char* ch_cMap(size_t length, ch_param_s params){
   return map;
 
 }
-
-/**
-int main(){
-
-  ch_param_s params;
-  params.start = 0.5;
-  params.rot = -1.5;
-  params.hue = 1.0;
-  params.gamma = 1.0;
-
-  ch_fsample_s* samples = ch_fMap(100,params);
-  
-  for( int i = 0; i < 100; i++){
-    double v = (samples[i].r + samples[i].r + samples[i].r)/3;
-    printf("val: %f\n",v);
-  }
-
-  unsigned char* char_samples = ch_cMap(100,params);
-  
-  for( int i = 0; i < 100; i++){
-    unsigned char v = (char_samples[i*3] + char_samples[i*3+1] + char_samples[i*3+2])/3;
-    printf("val: %d\n",v);
-  }
-
-  return 0;
-}
-**/
-
